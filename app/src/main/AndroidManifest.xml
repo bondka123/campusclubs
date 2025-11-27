@@ -38,6 +38,10 @@
             android:name=".StudentHomeActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".StudentChatActivity"
+            android:exported="false" />
+
         <!-- ACTIVITÉ DE LANCEMENT : DOIT ÊTRE EXPORTED = TRUE -->
         <activity
             android:name=".LoginActivity"

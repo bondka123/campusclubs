@@ -1,36 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="Espace Étudiant"
-        android:textSize="22sp"
-        android:layout_marginBottom="24dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/btnAllClubs"
-        android:text="Tous les clubs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/btnMyClubs"
-        android:text="Mes clubs"
+    <!-- Header with title and logout icon -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"/>
+        android:background="?attr/colorPrimary">
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:text="Déconnexion"
+        <Button
+            android:id="@+id/btnLogout"
+            android:text="← Déconnexion"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?attr/buttonBarButtonStyle"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:text="Espace Étudiant"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="16dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <!-- Main content area -->
+    <LinearLayout
+        android:layout_below="@id/headerLayout"
+        android:layout_above="@id/bottomNavigation"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnAllClubs"
+            android:text="Tous les clubs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnMyClubs"
+            android:text="Mes clubs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
+
+    </LinearLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        app:menu="@menu/student_bottom_menu"
+        android:background="?attr/colorPrimary"/>
 
-</LinearLayout>
+</RelativeLayout>

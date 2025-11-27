@@ -47,11 +47,13 @@ public class LoginActivity extends AppCompatActivity {
                     if ("admin".equals(user.getRole())) {
                         Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
                         i.putExtra("userId", user.getId());
+                        i.putExtra("userName", user.getUsername());
                         startActivity(i);
                         finish(); // Close login activity after successful login
                     } else {
                         Intent i = new Intent(LoginActivity.this, StudentHomeActivity.class);
                         i.putExtra("userId", user.getId());
+                        i.putExtra("userName", user.getUsername());
                         startActivity(i);
                         finish(); // Close login activity after successful login
                     }

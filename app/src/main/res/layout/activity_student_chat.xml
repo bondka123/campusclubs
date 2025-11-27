@@ -24,7 +24,7 @@
             android:textColor="@android:color/white"/>
 
         <TextView
-            android:text="Messages Admin"
+            android:text="Chat Admin"
             android:textSize="20sp"
             android:textColor="@android:color/white"
             android:layout_marginStart="16dp"
@@ -62,7 +62,7 @@
 
         <EditText
             android:id="@+id/etMessage"
-            android:hint="Répondre..."
+            android:hint="Écrire un message..."
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/admin_bottom_menu"
+        app:menu="@menu/student_bottom_menu"
         android:background="?attr/colorPrimary"/>
 
 </RelativeLayout>

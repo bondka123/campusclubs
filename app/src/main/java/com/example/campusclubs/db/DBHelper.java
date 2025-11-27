@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.campusclubs.models.Club;
+import com.example.campusclubs.models.Message;
 import com.example.campusclubs.models.User;
 
 import java.util.ArrayList;
@@ -42,6 +43,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "user_id INTEGER," +
                 "club_id INTEGER)");
+
+        // Table messages
+        db.execSQL("CREATE TABLE messages (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "sender_id INTEGER," +
+                "sender_name TEXT," +
+                "recipient_id INTEGER," +
+                "recipient_name TEXT," +
+                "message_text TEXT," +
+                "timestamp LONG," +
+                "sender_role TEXT)");
 
         // Insérer un admin par défaut
         ContentValues admin = new ContentValues();
@@ -193,6 +205,70 @@ public class DBHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow("category"))
                 );
                 list.add(c);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
+
+    // Messages
+    public long addMessage(int senderId, String senderName, int recipientId, String recipientName,
+                           String messageText, String senderRole) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("sender_id", senderId);
+        values.put("sender_name", senderName);
+        values.put("recipient_id", recipientId);
+        values.put("recipient_name", recipientName);
+        values.put("message_text", messageText);
+        values.put("timestamp", System.currentTimeMillis());
+        values.put("sender_role", senderRole);
+        return db.insert("messages", null, values);
+    }
+
+    public List<Message> getMessagesForAdmin() {
+        List<Message> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM messages ORDER BY timestamp DESC", null);
+        if (cursor.moveToFirst()) {
+            do {
+                Message m = new Message(
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("sender_id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("sender_name")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("recipient_id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("recipient_name")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("message_text")),
+                        cursor.getLong(cursor.getColumnIndexOrThrow("timestamp")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("sender_role"))
+                );
+                list.add(m);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
+
+    public List<Message> getMessagesForStudent(int studentId) {
+        List<Message> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM messages WHERE sender_id=? OR recipient_id=? ORDER BY timestamp DESC",
+                new String[]{String.valueOf(studentId), String.valueOf(studentId)}
+        );
+        if (cursor.moveToFirst()) {
+            do {
+                Message m = new Message(
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("sender_id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("sender_name")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("recipient_id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("recipient_name")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("message_text")),
+                        cursor.getLong(cursor.getColumnIndexOrThrow("timestamp")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("sender_role"))
+                );
+                list.add(m);
             } while (cursor.moveToNext());
         }
         cursor.close();

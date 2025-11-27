@@ -18,18 +18,23 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class AdminChatActivity extends AppCompatActivity {
+public class StudentChatActivity extends AppCompatActivity {
 
     private EditText etMessage;
     private Button btnSend;
     private LinearLayout messagesContainer;
     private BottomNavigationView bottomNavigation;
     private DBHelper dbHelper;
+    private int userId;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_chat);
+        setContentView(R.layout.activity_student_chat);
+
+        userId = getIntent().getIntExtra("userId", -1);
+        userName = getIntent().getStringExtra("userName");
 
         etMessage = findViewById(R.id.etMessage);
         btnSend = findViewById(R.id.btnSend);
@@ -55,29 +60,19 @@ public class AdminChatActivity extends AppCompatActivity {
             return;
         }
 
-        // Admin user info
+        // Get admin user (assuming admin has id 1)
         int adminId = 1;
         String adminName = "Admin";
-        // Assuming admin is replying to the last student message
-        // In a real app, you'd select which student to reply to
 
-        dbHelper.addMessage(adminId, adminName, adminId, adminName, messageText, "admin");
+        dbHelper.addMessage(userId, userName, adminId, adminName, messageText, "student");
         etMessage.setText("");
         loadMessages();
-        Toast.makeText(this, "Réponse envoyée", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Message envoyé", Toast.LENGTH_SHORT).show();
     }
 
     private void loadMessages() {
         messagesContainer.removeAllViews();
-        List<Message> messages = dbHelper.getMessagesForAdmin();
-
-        if (messages.isEmpty()) {
-            TextView emptyView = new TextView(this);
-            emptyView.setText("Aucun message pour le moment");
-            emptyView.setPadding(16, 16, 16, 16);
-            messagesContainer.addView(emptyView);
-            return;
-        }
+        List<Message> messages = dbHelper.getMessagesForStudent(userId);
 
         for (Message message : messages) {
             addMessageView(message);
@@ -89,7 +84,7 @@ public class AdminChatActivity extends AppCompatActivity {
         messageLayout.setOrientation(LinearLayout.VERTICAL);
         messageLayout.setPadding(16, 8, 16, 8);
 
-        boolean isFromStudent = message.getSenderRole().equals("student");
+        boolean isFromMe = message.getSenderId() == userId;
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -98,11 +93,11 @@ public class AdminChatActivity extends AppCompatActivity {
         params.setMargins(0, 4, 0, 4);
         messageLayout.setLayoutParams(params);
 
-        // Sender info
+        // Sender name
         TextView senderView = new TextView(this);
-        senderView.setText(message.getSenderName() + " (" + message.getSenderRole() + ")");
+        senderView.setText(isFromMe ? "Vous:" : message.getSenderName() + ":");
         senderView.setTextSize(12);
-        senderView.setTextColor(isFromStudent ? 0xFF0066CC : 0xFF00AA00);
+        senderView.setTextColor(isFromMe ? 0xFF0066CC : 0xFF666666);
         messageLayout.addView(senderView);
 
         // Message text
@@ -110,7 +105,7 @@ public class AdminChatActivity extends AppCompatActivity {
         messageView.setText(message.getMessageText());
         messageView.setTextSize(14);
         messageView.setPadding(12, 8, 12, 8);
-        messageView.setBackgroundColor(isFromStudent ? 0xFFE3F2FD : 0xFFE8F5E9);
+        messageView.setBackgroundColor(isFromMe ? 0xFFE3F2FD : 0xFFF5F5F5);
         messageLayout.addView(messageView);
 
         // Timestamp
@@ -128,20 +123,23 @@ public class AdminChatActivity extends AppCompatActivity {
         bottomNavigation.setOnItemSelectedListener(menuItem -> {
             int itemId = menuItem.getItemId();
             if (itemId == R.id.nav_home) {
-                startActivity(new Intent(AdminChatActivity.this, AdminHomeActivity.class));
+                startActivity(new Intent(StudentChatActivity.this, StudentHomeActivity.class)
+                        .putExtra("userId", userId));
                 finish();
                 return true;
             } else if (itemId == R.id.nav_chat) {
                 return true;
             } else if (itemId == R.id.nav_clubs) {
-                Intent clubIntent = new Intent(AdminChatActivity.this, ClubListActivity.class);
-                clubIntent.putExtra("isAdmin", true);
+                Intent clubIntent = new Intent(StudentChatActivity.this, ClubListActivity.class);
+                clubIntent.putExtra("isAdmin", false);
+                clubIntent.putExtra("userId", userId);
+                clubIntent.putExtra("mode", "all");
                 startActivity(clubIntent);
                 finish();
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                startActivity(new Intent(AdminChatActivity.this, AdminProfileActivity.class));
-                finish();
+                // TODO: Create StudentProfileActivity
+                Toast.makeText(this, "Profil - À venir", Toast.LENGTH_SHORT).show();
                 return true;
             }
             return false;
@@ -149,7 +147,7 @@ public class AdminChatActivity extends AppCompatActivity {
     }
 
     private void logoutUser() {
-        Intent intent = new Intent(AdminChatActivity.this, LoginActivity.class);
+        Intent intent = new Intent(StudentChatActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
