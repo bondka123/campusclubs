@@ -16,7 +16,7 @@
 
         <Button
             android:id="@+id/btnLogout"
-            android:text="⬅ Déconnexion"
+            android:text="← Déconnexion"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:textColor="@android:color/white"/>
 
         <TextView
-            android:text="Espace Admin"
+            android:text="Chat Admin"
             android:textSize="20sp"
             android:textColor="@android:color/white"
             android:layout_marginStart="16dp"
@@ -34,17 +34,7 @@
     </LinearLayout>
 
     <!-- Main content area -->
-    <FrameLayout
-        android:id="@+id/contentFrame"
-        android:layout_below="@id/headerLayout"
-        android:layout_above="@id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <!-- Placeholder content -->
     <LinearLayout
-        android:id="@+id/placeholderContent"
         android:layout_below="@id/headerLayout"
         android:layout_above="@id/bottomNavigation"
         android:orientation="vertical"
@@ -54,17 +44,9 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tvWelcome"
-            android:text="Bienvenue Admin"
-            android:textSize="18sp"
-            android:layout_marginBottom="24dp"
+            android:id="@+id/tvChat"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/btnManageClubs"
-            android:text="Gérer les clubs"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>

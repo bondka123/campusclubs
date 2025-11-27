@@ -27,6 +27,14 @@
             android:exported="false" />
 
         <activity
+            android:name=".AdminChatActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminProfileActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".StudentHomeActivity"
             android:exported="false" />
 

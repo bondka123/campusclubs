@@ -8,10 +8,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.campusclubs.clubs.ClubListActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AdminHomeActivity extends AppCompatActivity {
 
     Button btnManageClubs, btnLogout;
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,10 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         btnManageClubs = findViewById(R.id.btnManageClubs);
         btnLogout = findViewById(R.id.btnLogout);
+        bottomNavigation = findViewById(R.id.bottomNavigation);
+
+        // Set Home as selected on startup
+        bottomNavigation.setSelectedItemId(R.id.nav_home);
 
         btnManageClubs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,7 +37,35 @@ public class AdminHomeActivity extends AppCompatActivity {
         });
 
         btnLogout.setOnClickListener(v -> {
-            finish();
+            logoutUser();
         });
+
+        // Bottom Navigation Click Listener
+        bottomNavigation.setOnItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    return true;
+                case R.id.nav_chat:
+                    startActivity(new Intent(AdminHomeActivity.this, AdminChatActivity.class));
+                    return true;
+                case R.id.nav_clubs:
+                    Intent clubIntent = new Intent(AdminHomeActivity.this, ClubListActivity.class);
+                    clubIntent.putExtra("isAdmin", true);
+                    startActivity(clubIntent);
+                    return true;
+                case R.id.nav_profile:
+                    startActivity(new Intent(AdminHomeActivity.this, AdminProfileActivity.class));
+                    return true;
+            }
+            return false;
+        });
+    }
+
+    private void logoutUser() {
+        // Clear user session/preferences if needed
+        Intent intent = new Intent(AdminHomeActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
