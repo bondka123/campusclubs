@@ -48,10 +48,12 @@ public class LoginActivity extends AppCompatActivity {
                         Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
                         i.putExtra("userId", user.getId());
                         startActivity(i);
+                        finish(); // Close login activity after successful login
                     } else {
                         Intent i = new Intent(LoginActivity.this, StudentHomeActivity.class);
                         i.putExtra("userId", user.getId());
                         startActivity(i);
+                        finish(); // Close login activity after successful login
                     }
                 }
             }
