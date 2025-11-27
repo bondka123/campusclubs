@@ -27,23 +27,23 @@ public class AdminProfileActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.nav_profile);
 
         bottomNavigation.setOnItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.nav_home:
-                    startActivity(new Intent(AdminProfileActivity.this, AdminHomeActivity.class));
-                    finish();
-                    return true;
-                case R.id.nav_chat:
-                    startActivity(new Intent(AdminProfileActivity.this, AdminChatActivity.class));
-                    finish();
-                    return true;
-                case R.id.nav_clubs:
-                    Intent clubIntent = new Intent(AdminProfileActivity.this, ClubListActivity.class);
-                    clubIntent.putExtra("isAdmin", true);
-                    startActivity(clubIntent);
-                    finish();
-                    return true;
-                case R.id.nav_profile:
-                    return true;
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.nav_home) {
+                startActivity(new Intent(AdminProfileActivity.this, AdminHomeActivity.class));
+                finish();
+                return true;
+            } else if (itemId == R.id.nav_chat) {
+                startActivity(new Intent(AdminProfileActivity.this, AdminChatActivity.class));
+                finish();
+                return true;
+            } else if (itemId == R.id.nav_clubs) {
+                Intent clubIntent = new Intent(AdminProfileActivity.this, ClubListActivity.class);
+                clubIntent.putExtra("isAdmin", true);
+                startActivity(clubIntent);
+                finish();
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                return true;
             }
             return false;
         });

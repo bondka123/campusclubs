@@ -42,20 +42,20 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         // Bottom Navigation Click Listener
         bottomNavigation.setOnItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.nav_home:
-                    return true;
-                case R.id.nav_chat:
-                    startActivity(new Intent(AdminHomeActivity.this, AdminChatActivity.class));
-                    return true;
-                case R.id.nav_clubs:
-                    Intent clubIntent = new Intent(AdminHomeActivity.this, ClubListActivity.class);
-                    clubIntent.putExtra("isAdmin", true);
-                    startActivity(clubIntent);
-                    return true;
-                case R.id.nav_profile:
-                    startActivity(new Intent(AdminHomeActivity.this, AdminProfileActivity.class));
-                    return true;
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.nav_home) {
+                return true;
+            } else if (itemId == R.id.nav_chat) {
+                startActivity(new Intent(AdminHomeActivity.this, AdminChatActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_clubs) {
+                Intent clubIntent = new Intent(AdminHomeActivity.this, ClubListActivity.class);
+                clubIntent.putExtra("isAdmin", true);
+                startActivity(clubIntent);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                startActivity(new Intent(AdminHomeActivity.this, AdminProfileActivity.class));
+                return true;
             }
             return false;
         });
